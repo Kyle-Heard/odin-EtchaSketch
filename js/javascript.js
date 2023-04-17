@@ -1,21 +1,46 @@
-let gridSize = 16;
-const gridArray = [];
 
-const myButton = document.querySelector('button');
+const gridArray = [];
+body = document.querySelector('body');
+
+const resizeBtn = document.querySelector('button.resize');
+resizeBtn.addEventListener('click', resizeGrid);
+
+const myButton = document.querySelector('button.snippet');
 myButton.addEventListener('click', function () {
     mainContainer.remove();
-    resetGrid();
+    resetGrid(16);
 });
 
+function resizeGrid(){
+    let newSize = prompt("What Size should the Grid Be? ");
+    mainContainer.remove();
+    if (newSize < 2) resetGrid(2);
+    else if (newSize > 100) resetGrid(100);
+    else resetGrid(newSize);
+}
+
 function hoverSquare() {
-    console.log(this.style.backgroundColor);
-    this.style.backgroundColor = "green";
+    const currOpacity = Number(this.style.opacity) + .1;
+    console.log(currOpacity);
+    this.style.opacity = currOpacity;
+    this.style.backgroundColor = randomColor();
+    
 
 }
 
-body = document.querySelector('body');
+function randomColor(){
+    let hexValue = "#";
+    const hexRange = '0123456789ABCDEF';
+    for (x = 0; x < 6; x++){
+        hexValue += hexRange.charAt(Math.floor(Math.random() * 16));
+    }
 
-function resetGrid() {
+    console.log(hexValue);
+    return hexValue;
+}
+
+
+function resetGrid(gridSize) {
     mainContainer = document.createElement('div');
     mainContainer.classList.add('mainContainer');
     mainContainer.setAttribute('style', 'border: 5px solid; width: 960px; height: 960px;');
@@ -32,13 +57,8 @@ function resetGrid() {
         }
         mainContainer.appendChild(divRow);
     }
-
-
-
     gridArray.forEach(square => square.addEventListener('mouseover', hoverSquare));
-
-
     body.insertBefore(mainContainer, body.firstChild);
 }
 
-resetGrid();
+resetGrid(16);
